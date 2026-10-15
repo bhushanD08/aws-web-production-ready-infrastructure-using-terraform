@@ -1,0 +1,11 @@
+resource "aws_route53_record" "alb_alias" {
+  zone_id = data.terraform_remote_state.dns_backend.outputs.hosted_zone_id
+  name    = var.dns_name_to_access_alb
+  type    = "A" # Use "AAAA" instead if you need IPv6 dual-stack routing
+
+  alias {
+    name                   = module.alb.alb_dns_name
+    zone_id                = module.alb.alb_zone_id
+    evaluate_target_health = true
+  }
+}
